@@ -1,0 +1,25 @@
+Build an ASP.NET MVC web application called "TaskBoard" — a personal task manager. Use .NET 8, C#, Entity Framework Core with SQLite, Razor views, Bootstrap 5, and jQuery.
+Models:
+
+TaskItem: Id, Title, Description, Priority (Low/Medium/High enum), IsCompleted, CreatedAt, CompletedAt
+
+Features:
+
+Full CRUD for tasks using MVC controllers and Razor views
+Index page shows all tasks in a Bootstrap-styled table with badge colors for priority
+Create/Edit pages use Bootstrap forms with validation
+jQuery AJAX for: toggling task completion (checkbox), deleting a task inline with a confirmation, and filtering tasks by status (All/Active/Completed) without page reload
+A simple Bootstrap 5 navbar with the app name
+Sort tasks by CreatedAt descending by default
+
+Technical requirements:
+
+Use the standard MVC pattern (Controllers, Views, Models folders)
+Razor views with @model bindings, @foreach loops, partial views where appropriate
+Entity Framework Core with code-first migrations and SQLite
+jQuery loaded via CDN, all AJAX calls go to controller actions that return JSON
+Bootstrap 5 via CDN
+Clean consistent code with XML doc comments on controller actions
+
+Keep it simple and clean — no authentication, no separate API project. Everything in one MVC project.
+

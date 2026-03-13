@@ -1,0 +1,28 @@
+# Instructions file
+Instruct.txt
+
+# Build output
+bin/
+obj/
+
+# SQLite database
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific VS / Rider files
+.vs/
+*.user
+*.suo
+.idea/
+
+# Published output
+publish/
+
+# NuGet
+*.nupkg
+packages/
+
+# OS
+.DS_Store
+Thumbs.db

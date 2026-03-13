@@ -1,0 +1,41 @@
+@model IEnumerable<TaskItem>
+
+@foreach (var task in Model)
+{
+    <tr class="@(task.IsCompleted ? "table-success" : "")">
+        <td class="text-center align-middle">
+            <input type="checkbox"
+                   class="form-check-input toggle-complete"
+                   data-id="@task.Id"
+                   @(task.IsCompleted ? "checked" : "") />
+        </td>
+        <td class="align-middle task-title @(task.IsCompleted ? "text-decoration-line-through text-muted" : "")">
+            @task.Title
+            @if (!string.IsNullOrWhiteSpace(task.Description))
+            {
+                <small class="d-block text-muted">@task.Description</small>
+            }
+        </td>
+        <td class="align-middle">
+            @{
+                var badgeClass = task.Priority switch
+                {
+                    Priority.High   => "bg-danger",
+                    Priority.Medium => "bg-warning text-dark",
+                    _               => "bg-success"
+                };
+            }
+            <span class="badge @badgeClass">@task.Priority</span>
+        </td>
+        <td class="align-middle">@task.CreatedAt.ToLocalTime().ToString("MM/dd/yyyy HH:mm")</td>
+        <td class="align-middle">
+            @(task.CompletedAt.HasValue
+                ? task.CompletedAt.Value.ToLocalTime().ToString("MM/dd/yyyy HH:mm")
+                : "-")
+        </td>
+        <td class="align-middle">
+            <a asp-action="Edit" asp-route-id="@task.Id" class="btn btn-sm btn-primary">Edit</a>
+            <button class="btn btn-sm btn-danger delete-btn" data-id="@task.Id">Delete</button>
+        </td>
+    </tr>
+}

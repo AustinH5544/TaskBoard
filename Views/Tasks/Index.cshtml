@@ -1,0 +1,79 @@
+@model IEnumerable<TaskItem>
+@{
+    ViewData["Title"] = "My Tasks";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">My Tasks</h2>
+    <a asp-action="Create" class="btn btn-success">+ New Task</a>
+</div>
+
+<div class="btn-group mb-3" role="group" aria-label="Filter tasks">
+    <button type="button" class="btn btn-outline-secondary filter-btn active" data-status="all">All</button>
+    <button type="button" class="btn btn-outline-secondary filter-btn" data-status="active">Active</button>
+    <button type="button" class="btn btn-outline-secondary filter-btn" data-status="completed">Completed</button>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th style="width:60px">Done</th>
+                <th>Title</th>
+                <th style="width:110px">Priority</th>
+                <th style="width:160px">Created</th>
+                <th style="width:160px">Completed</th>
+                <th style="width:130px">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="task-tbody">
+            @await Html.PartialAsync("_TaskTable", Model)
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+<script>
+$(function () {
+
+    // Filter buttons — replace table body via AJAX
+    $('.filter-btn').on('click', function () {
+        $('.filter-btn').removeClass('active');
+        $(this).addClass('active');
+        var status = $(this).data('status');
+        $.get('/Tasks/Filter', { status: status }, function (html) {
+            $('#task-tbody').html(html);
+        });
+    });
+
+    // Toggle task completion inline
+    $(document).on('change', '.toggle-complete', function () {
+        var id  = $(this).data('id');
+        var $row = $(this).closest('tr');
+        $.post('/Tasks/ToggleComplete/' + id, function (result) {
+            if (!result.success) return;
+            if (result.isCompleted) {
+                $row.addClass('table-success');
+                $row.find('.task-title')
+                    .addClass('text-decoration-line-through text-muted');
+            } else {
+                $row.removeClass('table-success');
+                $row.find('.task-title')
+                    .removeClass('text-decoration-line-through text-muted');
+            }
+        });
+    });
+
+    // Delete task inline with confirmation
+    $(document).on('click', '.delete-btn', function () {
+        if (!confirm('Delete this task? This cannot be undone.')) return;
+        var id   = $(this).data('id');
+        var $row = $(this).closest('tr');
+        $.post('/Tasks/Delete/' + id, function (result) {
+            if (result.success) $row.fadeOut(300, function () { $(this).remove(); });
+        });
+    });
+
+});
+</script>
+}
